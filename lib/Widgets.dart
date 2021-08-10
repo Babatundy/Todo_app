@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapp/models/tasks_list.dart';
 import 'styles.dart';
+import 'first_screen.dart';
 
 //////////////////////////////** for drawer **/////////////////////////////////////////////////////////////
 class Drawer_Widget extends StatelessWidget {
@@ -58,11 +61,11 @@ class List_item extends StatelessWidget {
 }
 
 //////////////////////////////** for bottom sheet **/////////////////////////////////////////////////////////////
-class B_Sheet extends StatelessWidget {
+class B_Sheet {
   String task_text;
 
   @override
-  Widget build(BuildContext context) {
+  Widget B_s(BuildContext context) {
     return Container(
       child: Column(
         children: [
@@ -73,7 +76,10 @@ class B_Sheet extends StatelessWidget {
           ),
           RaisedButton(
             child: Text("add task"),
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<List_data>(context, listen: false).add_to_list(task_text);
+              print(Provider.of<List_data>(context, listen: false).tasks);
+            },
           )
         ],
       ),

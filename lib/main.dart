@@ -6,11 +6,18 @@ import 'models/tasks_list.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-      initialRoute: "main_screen",
-      routes: {
-        "main_screen": (context) => Main_screen(),
-      },
+    MultiProvider(
+      providers: [
+
+        ChangeNotifierProvider(create: (_)=>List_data()),
+        ChangeNotifierProvider(create: (_)=>changes()),
+      ],
+      child: MaterialApp(
+        initialRoute: "main_screen",
+        routes: {
+          "main_screen": (context) => Main_screen(),
+        },
+      ),
     ),
   );
 }
