@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 
-class DB_helper {
+class DB_helper with ChangeNotifier {
   static const task_id = "id";
   static const task_text = "text";
   static const task_checking = "checking";
@@ -25,22 +25,29 @@ class DB_helper {
       return _db;
     }
   }
+  void reset_db(){
+    print("nomi");
 
+  }
   creat() async {
+
     var direcroty = await getApplicationDocumentsDirectory();
-    String path = join(direcroty.path, "main_db.db");
-    var my_db = await openDatabase(path, version: 1, onCreate: oncreate);
+    String path = join(direcroty.path, "txaqzvdpg5s.db");
+    return await openDatabase(path, version: 1, onCreate: oncreate);
   }
 
   oncreate(Database db, int version) async {
     await db.execute(
-      "CREATE TABLE Tasks("
-      "$task_id INTEGER PRIMARY KEY"
-      "$task_checking INTEGER"
-      "$task_text TEXT"
-      ")",
+      '''
+      CREATE TABLE Tasks(
+      $task_id INTEGER PRIMARY KEY,
+      $task_checking INTEGER,
+      $task_text TEXT
+      )
+      ''',
     );
   }
+
   Future<int> insertt(Map<String, dynamic> row) async {
     Database dbb = await DB_helper.instnace.db;
 
@@ -49,15 +56,21 @@ class DB_helper {
 
   Future<List<Map<String, dynamic>>> Query_all() async {
     Database db = await DB_helper.instnace.db;
-    return await db.query("data");
+    return await db.query("Tasks");
   }
 
-  Future update(Map<String, dynamic> row) async {
+  Future<int> update(Map<String, dynamic> row) async {
     Database db = await DB_helper.instnace.db;
+    await db.update("Tasks", row,
+        where: "$task_id = ?", whereArgs: [row["$task_id"]]);
+  }
+
+  Future<int> delete(int i) async {
+    Database db = await DB_helper.instnace.db;
+
+    return await db.delete("Tasks", where: "$task_id = ?", whereArgs: [i]);
   }
 }
-
-
 
 ////////////////////////////////////////////////////
 /*

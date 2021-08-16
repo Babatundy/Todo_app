@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/DB_helper.dart';
 import 'package:todoapp/first_screen.dart';
 
 class Task extends StatelessWidget {
   String text = '';
+  int id;
   int index;
   bool valuee = false;
   Function callback;
 
-  Task({this.text, this.index});
+  Task({this.text, this.index,this.id});
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +26,9 @@ class Task extends StatelessWidget {
             },
           ),
           title: Text(text),
-          onLongPress: (){
+          onLongPress: () async{
 
+            DB_helper.instnace.delete(id);
             Provider.of<List_data>(context,listen: false).remove_item(index);
           },
 

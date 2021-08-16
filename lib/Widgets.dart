@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todoapp/DB_helper.dart';
 import 'package:todoapp/models/tasks_list.dart';
 import 'styles.dart';
 import 'first_screen.dart';
@@ -62,8 +63,10 @@ class List_item extends StatelessWidget {
 
 //////////////////////////////** for bottom sheet **/////////////////////////////////////////////////////////////
 class B_Sheet {
+  int index;
+  B_Sheet();
+  int id=1;
   String task_text;
-
   @override
   Widget B_s(BuildContext context) {
     return Container(
@@ -76,9 +79,19 @@ class B_Sheet {
           ),
           RaisedButton(
             child: Text("add task"),
-            onPressed: () {
+            onPressed: () async{
+
+              await DB_helper.instnace.insertt({
+                "${DB_helper.task_checking}":0,
+                "${DB_helper.task_text}":task_text
+              });
+              print(await DB_helper.instnace.Query_all());
               Provider.of<List_data>(context, listen: false).add_to_list(task_text);
-              print(Provider.of<List_data>(context, listen: false).tasks);
+              if(Provider.of<List_data>(context, listen: false).tasks.length==0)
+                {
+                  id=1;
+                }
+              Navigator.pop(context);
             },
           )
         ],
